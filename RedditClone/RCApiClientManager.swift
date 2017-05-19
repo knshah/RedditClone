@@ -16,7 +16,7 @@ class RCApiClientManager: AFHTTPSessionManager {
     static let shared = RCApiClientManager()
     
     private init() {
-        let baseURL = URL(string: "https://www.reddit.com/")
+        let baseURL = URL(string: "https://www.reddit.com")
         super.init(baseURL: baseURL, sessionConfiguration: URLSessionConfiguration.default)
     }
     

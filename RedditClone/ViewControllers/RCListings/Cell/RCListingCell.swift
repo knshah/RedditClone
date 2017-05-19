@@ -8,6 +8,9 @@
 
 import Foundation
 
+private let HORIZONTAL_PADDING = CGFloat(20)
+private let VERTICAL_PADDING = CGFloat(20)
+
 class RCListingCell: UITableViewCell {
     
     let thumbnailImageView = UIImageView(frame: .zero)
@@ -39,39 +42,40 @@ class RCListingCell: UITableViewCell {
     
     func configure(listing: RCListingModel) {
         self.thumbnailImageView.frame.size = CGSize(width: listing.thumbnailWidth, height: listing.thumbnailHeight)
-        if listing.thumbnailImageURL() == nil {
-//            self.thumbnailImageView.image =  // placeholder image
-        }
-        else {
+        if listing.thumbnailImageURL() != nil {
             self.thumbnailImageView.setImageWith(listing.thumbnailImageURL()!)
         }
-        
         self.title.text = listing.title
+        
         self.setNeedsUpdateConstraints()
     }
     
     override func updateConstraints() {
         let text = NSString(string: self.title.text!)
-        let maxLabelWidth = self.contentView.frame.width - 60 - self.thumbnailImageView.frame.width
-        let maxLabelHeight = ceilf(Float(text.boundingRect(with: CGSize(width: maxLabelWidth, height: CGFloat(Float.greatestFiniteMagnitude)), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName : self.title.font], context: nil).size.height))
+        let maxLabelWidth = self.contentView.frame.width - 3*HORIZONTAL_PADDING - self.thumbnailImageView.frame.width
+        let maxLabelHeight = ceilf(Float(text.boundingRect(with: CGSize(width: maxLabelWidth,
+                                                                        height: CGFloat(Float.greatestFiniteMagnitude)),
+                                                           options: .usesLineFragmentOrigin,
+                                                           attributes: [NSFontAttributeName : self.title.font],
+                                                           context: nil).size.height))
         
         self.thumbnailImageView.snp.remakeConstraints { make in
-            _ = make.top.equalTo(self.contentView).offset(20)
-            _ = make.right.equalTo(self.contentView).offset(-20)
+            _ = make.top.equalTo(self.contentView).offset(VERTICAL_PADDING)
+            _ = make.right.equalTo(self.contentView).offset(-HORIZONTAL_PADDING)
             _ = make.width.equalTo(self.thumbnailImageView.frame.width)
             _ = make.height.equalTo(self.thumbnailImageView.frame.height).priority(999)
             if CGFloat(maxLabelHeight) < self.thumbnailImageView.frame.height {
-                _ = make.bottom.equalTo(self.contentView).offset(-20)
+                _ = make.bottom.equalTo(self.contentView).offset(-VERTICAL_PADDING)
             }
         }
         
         self.title.snp.remakeConstraints { make in
             _ = make.top.equalTo(self.thumbnailImageView)
-            _ = make.right.equalTo(self.thumbnailImageView.snp.left).offset(-20)
+            _ = make.right.equalTo(self.thumbnailImageView.snp.left).offset(-HORIZONTAL_PADDING)
             _ = make.width.equalTo(maxLabelWidth)
             _ = make.height.equalTo(maxLabelHeight).priority(999)
             if CGFloat(maxLabelHeight) > self.thumbnailImageView.frame.height {
-                _ = make.bottom.equalTo(self.contentView).offset(-20)
+                _ = make.bottom.equalTo(self.contentView).offset(-VERTICAL_PADDING)
             }
         }
         

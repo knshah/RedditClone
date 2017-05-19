@@ -13,11 +13,12 @@ class RCListingViewController: UITableViewController {
     
     let listingCellIdentifier = "listingCell"
     let listingService = RCListingService()
+    let commentService = RCListingCommentsService()
     var currentListingsCount = 0
     
     init() {
         super.init(style: .plain)
-        self.title = "All Listings"
+        self.title = "Listings"
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,10 +40,6 @@ class RCListingViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.getNextListings()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     // MARK: - Private methods
@@ -88,6 +85,12 @@ class RCListingViewController: UITableViewController {
         if indexPath.row == self.listingService.listings.count - 1 {
             self.getNextListings()
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let article = self.listingService.listings[indexPath.row]
+        let commentVC = RCCommentsViewController(listing: article)
+        self.navigationController?.pushViewController(commentVC, animated: true)
     }
 }
 

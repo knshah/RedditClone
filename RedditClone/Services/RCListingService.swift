@@ -20,9 +20,8 @@ class RCListingService: NSObject {
     
     func getNextListing(ofKind: String, completionHandler: @escaping RCCompletionHandler) {
         let params = self.after == nil ? nil : ["after": self.after!]
-        manager.get("r/all/\(ofKind).json", parameters: params, progress: nil, success: { (task, responseObject) in
+        manager.get("/r/all/\(ofKind).json", parameters: params, progress: nil, success: { (task, responseObject) in
             if let response = responseObject as? NSDictionary {
-                print(response)
                 self.configureListing(response)
                 completionHandler(true, nil)
             }
@@ -30,7 +29,7 @@ class RCListingService: NSObject {
                 completionHandler(false, "Unable to parse response data.")
             }
         }) { (task, error) in
-            print("faliure")
+            print("Error: \(error.localizedDescription)")
             completionHandler(false, error.localizedDescription)
         }
     }

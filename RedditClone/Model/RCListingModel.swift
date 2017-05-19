@@ -11,6 +11,8 @@ import Foundation
 class RCListingModel: NSObject {
     
     var title = ""
+    var subreddit = ""
+    var articleId = ""
     var thumbnail: String? = nil
     var thumbnailWidth: CGFloat = CGFloat(0)
     var thumbnailHeight: CGFloat = CGFloat(0)
@@ -19,6 +21,8 @@ class RCListingModel: NSObject {
         super.init()
         
         self.title = responseObject.string(forKey: "title")
+        self.subreddit = responseObject.string(forKey: "subreddit")
+        self.articleId = responseObject.string(forKey: "id")
         self.thumbnail = responseObject.string(forKey: "thumbnail")
         if let width = responseObject.number(forKey: "thumbnail_width") {
             self.thumbnailWidth = CGFloat(width.floatValue)
